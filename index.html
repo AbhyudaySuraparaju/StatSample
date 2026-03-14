@@ -1360,7 +1360,7 @@ function updateC6i1() {
 
     const diff = m1 - m2;
 
-    const n2 = Math.ceil(sp2 * Math.pow((z_alpha + z_beta) / diff, 2));
+    const n2 = Math.ceil((1 + 1/k) * Math.pow((z_alpha + z_beta) / d, 2));
     const n1 = Math.ceil(k * n2);
 
     document.getElementById('c6i1outtails').textContent =
