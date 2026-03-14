@@ -2294,7 +2294,7 @@ function updateC8i1() {
     }
     
     const d = Math.abs(m2 - m1);
-    const sp = Math.sqrt(s1 * s1 + s2 * s2 - 2 * Math.abs(r) * s1 * s2);
+    const sp = Math.sqrt(s1*s1 + s2*s2 - 2*r*s1*s2);
     const z_alpha = qnorm(1 - adjustedAlpha / 2);
     const z_beta = qnorm(1 - beta);
     
