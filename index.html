@@ -1333,39 +1333,49 @@ function addChapter6UI() {
 // ==================== Chapter 6 Calculation Functions ====================
 
 function updateC6i1() {
+
     const m1 = getNum('c6i1m1');
     const m2 = getNum('c6i1m2');
     const s1 = getNum('c6i1s1');
     const s2 = getNum('c6i1s2');
     const k = getNum('c6i1k');
+
     const alpha = (100 - getNum('c6i1alpha')) / 100;
     const beta = (100 - getNum('c6i1beta')) / 100;
     const att = getNum('c6i1att') / 100;
-    
+
     const isTwoTailed = document.querySelector('input[name="c6i1rd"]:checked').value === 'two-tailed';
-    
-    let adjustedAlpha = alpha;
-    if (!isTwoTailed) {
-        adjustedAlpha = 2 * alpha;
+
+    let z_alpha;
+
+    if (isTwoTailed) {
+        z_alpha = qnorm(1 - alpha / 2);
+    } else {
+        z_alpha = qnorm(1 - alpha);
     }
-    
-    const sp2 = (k * s1 * s1 + s2 * s2) / k;
-    const d = m2 - m1;
-    const z_alpha = qnorm(1 - adjustedAlpha / 2);
+
     const z_beta = qnorm(1 - beta);
-    
-    const n2 = Math.ceil(sp2 * Math.pow((z_alpha + z_beta) / d, 2));
+
+    const sp2 = (k * s1 * s1 + s2 * s2) / k;
+
+    const diff = m1 - m2;
+
+    const n2 = Math.ceil(sp2 * Math.pow((z_alpha + z_beta) / diff, 2));
     const n1 = Math.ceil(k * n2);
-    
-    document.getElementById('c6i1outtails').textContent = 
-        isTwoTailed ? 'Two-tailed comparison: (the two means are different)' : 
-                      'One-tailed comparison: (one mean is larger/smaller than the other)';
+
+    document.getElementById('c6i1outtails').textContent =
+        isTwoTailed
+            ? 'Two-tailed comparison: (the two means are different)'
+            : 'One-tailed comparison: (one mean is larger/smaller than the other)';
+
     document.getElementById('c6i1size1').textContent = n1;
     document.getElementById('c6i1size2').textContent = n2;
-    
-    const desc = `With the given anticipated means of ${m1} and ${m2}, in the two groups, random samples of size at least n₁ = ${n1} (${Math.ceil(n1*(1+att))} with ${att*100}% attrition) and n₂ = ${n2} (${Math.ceil(n2*(1+att))} with ${att*100}% attrition) are required to detect a true difference with ${(1-alpha)*100}% confidence and ${(1-beta)*100}% power for a ${isTwoTailed ? 'two-tailed' : 'one-tailed'} comparison.`;
+
+    const desc = `With the given anticipated means of ${m1} and ${m2}, in the two groups, random samples of size at least n₁ = ${n1} (${Math.ceil(n1 * (1 + att))} with ${att * 100}% attrition) and n₂ = ${n2} (${Math.ceil(n2 * (1 + att))} with ${att * 100}% attrition) are required to detect a true difference with ${(1 - alpha) * 100}% confidence and ${(1 - beta) * 100}% power for a ${isTwoTailed ? 'two-tailed' : 'one-tailed'} comparison.`;
+
     document.getElementById('c6i1outdesc').textContent = desc;
 }
+
 
 function updateC6i2() {
     const d = getNum('c6i2d');
