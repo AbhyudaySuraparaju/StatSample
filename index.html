@@ -1344,7 +1344,8 @@ function updateC6i1() {
     const beta = (100 - getNum('c6i1beta')) / 100;
     const att = getNum('c6i1att') / 100;
 
-    const isTwoTailed = document.querySelector('input[name="c6i1rd"]:checked').value === 'two-tailed';
+    const isTwoTailed =
+        document.querySelector('input[name="c6i1rd"]:checked').value === 'two-tailed';
 
     let z_alpha;
 
@@ -1356,11 +1357,12 @@ function updateC6i1() {
 
     const z_beta = qnorm(1 - beta);
 
+    // pooled variance component
     const sp2 = (k * s1 * s1 + s2 * s2) / k;
 
-    const diff = m1 - m2;
+    const diff = Math.abs(m1 - m2);
 
-    const n2 = Math.ceil((1 + 1/k) * Math.pow((z_alpha + z_beta) / d, 2));
+    const n2 = Math.ceil(sp2 * Math.pow((z_alpha + z_beta) / diff, 2));
     const n1 = Math.ceil(k * n2);
 
     document.getElementById('c6i1outtails').textContent =
@@ -1377,36 +1379,47 @@ function updateC6i1() {
 }
 
 
+
 function updateC6i2() {
+
     const d = getNum('c6i2d');
     const k = getNum('c6i2k');
+
     const alpha = (100 - getNum('c6i2alpha')) / 100;
     const beta = (100 - getNum('c6i2beta')) / 100;
     const att = getNum('c6i2att') / 100;
-    
-    const isTwoTailed = document.querySelector('input[name="c6i2rd"]:checked').value === 'two-tailed';
-    
-    let adjustedAlpha = alpha;
-    if (!isTwoTailed) {
-        adjustedAlpha = 2 * alpha;
+
+    const isTwoTailed =
+        document.querySelector('input[name="c6i2rd"]:checked').value === 'two-tailed';
+
+    let z_alpha;
+
+    if (isTwoTailed) {
+        z_alpha = qnorm(1 - alpha / 2);
+    } else {
+        z_alpha = qnorm(1 - alpha);
     }
-    
-    const z_alpha = qnorm(1 - adjustedAlpha / 2);
+
     const z_beta = qnorm(1 - beta);
-    
-    const n2 = Math.ceil((1 + 1/k) * Math.pow((z_alpha + z_beta) / d, 2));
+
+    const zsum = z_alpha + z_beta;
+
+    // Cohen unequal sample size formula
+    const n2 = Math.ceil(((k + 1) / k) * (zsum * zsum) / (d * d));
     const n1 = Math.ceil(k * n2);
-    
-    document.getElementById('c6i2outtails').textContent = 
-        isTwoTailed ? 'Two-tailed comparison: (the two means are different)' : 
-                      'One-tailed comparison: (one mean is larger/smaller than the other)';
+
+    document.getElementById('c6i2outtails').textContent =
+        isTwoTailed
+            ? 'Two-tailed comparison: (the two means are different)'
+            : 'One-tailed comparison: (one mean is larger/smaller than the other)';
+
     document.getElementById('c6i2size1').textContent = n1;
     document.getElementById('c6i2size2').textContent = n2;
-    
-    const desc = `Assuming Cohen's d as ${d}, random samples of size at least n₁ = ${n1} (${Math.ceil(n1*(1+att))} with ${att*100}% attrition) and at least n₂ = ${n2} (${Math.ceil(n2*(1+att))} with ${att*100}% attrition) subjects are required to detect a true difference with ${(1-alpha)*100}% confidence and ${(1-beta)*100}% power for a ${isTwoTailed ? 'two-tailed' : 'one-tailed'} comparison.`;
+
+    const desc = `Assuming Cohen's d as ${d}, random samples of size at least n₁ = ${n1} (${Math.ceil(n1 * (1 + att))} with ${att * 100}% attrition) and at least n₂ = ${n2} (${Math.ceil(n2 * (1 + att))} with ${att * 100}% attrition) subjects are required to detect a true difference with ${(1 - alpha) * 100}% confidence and ${(1 - beta) * 100}% power for a ${isTwoTailed ? 'two-tailed' : 'one-tailed'} comparison.`;
+
     document.getElementById('c6i2outdesc').textContent = desc;
 }
-
 // ==================== Main Tab Switching Logic (Updated) ====================
 
 function setupChapterTabs() {
