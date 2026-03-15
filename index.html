@@ -1378,20 +1378,24 @@ function updateC6i1() {
     document.getElementById('c6i1outdesc').textContent = desc;
 }
 
-
-
 function updateC6i2() {
 
+    // ---- INPUTS ----
     const d = getNum('c6i2d');
     const k = getNum('c6i2k');
 
-    const alpha = (100 - getNum('c6i2alpha')) / 100;
-    const beta = (100 - getNum('c6i2beta')) / 100;
-    const att = getNum('c6i2att') / 100;
+    const conf = getNum('c6i2alpha');
+    const power = getNum('c6i2beta');
+    const attrition = getNum('c6i2att');
+
+    const alpha = (100 - conf) / 100;
+    const beta = (100 - power) / 100;
+    const att = attrition / 100;
 
     const isTwoTailed =
         document.querySelector('input[name="c6i2rd"]:checked').value === 'two-tailed';
 
+    // ---- Z VALUES ----
     let z_alpha;
 
     if (isTwoTailed) {
@@ -1404,19 +1408,31 @@ function updateC6i2() {
 
     const zsum = z_alpha + z_beta;
 
-    // Cohen unequal sample size formula
-    const n2 = Math.ceil(((k + 1) / k) * (zsum * zsum) / (d * d));
-    const n1 = Math.ceil(k * n2);
+    // ---- SAMPLE SIZE FORMULA (MATCHES R APP) ----
+    const n1 = Math.ceil((zsum * zsum) * (1 + k) / (d * d));
+    const n2 = Math.ceil(n1 / k);
 
+    // ---- ATTRITION ADJUSTED ----
+    const n1_adj = Math.ceil(n1 * (1 + att));
+    const n2_adj = Math.ceil(n2 * (1 + att));
+
+    // ---- OUTPUT TAIL TEXT ----
     document.getElementById('c6i2outtails').textContent =
         isTwoTailed
             ? 'Two-tailed comparison: (the two means are different)'
             : 'One-tailed comparison: (one mean is larger/smaller than the other)';
 
+    // ---- OUTPUT SAMPLE SIZES ----
     document.getElementById('c6i2size1').textContent = n1;
     document.getElementById('c6i2size2').textContent = n2;
 
-    const desc = `Assuming Cohen's d as ${d}, random samples of size at least n₁ = ${n1} (${Math.ceil(n1 * (1 + att))} with ${att * 100}% attrition) and at least n₂ = ${n2} (${Math.ceil(n2 * (1 + att))} with ${att * 100}% attrition) subjects are required to detect a true difference with ${(1 - alpha) * 100}% confidence and ${(1 - beta) * 100}% power for a ${isTwoTailed ? 'two-tailed' : 'one-tailed'} comparison.`;
+    // ---- DESCRIPTION TEXT ----
+    const desc =
+        `Assuming Cohen's d = ${d}, random samples of size at least n₁ = ${n1} ` +
+        `(${n1_adj} with ${attrition}% attrition) and at least n₂ = ${n2} ` +
+        `(${n2_adj} with ${attrition}% attrition) subjects are required ` +
+        `to detect a true difference with ${conf}% confidence and ${power}% power ` +
+        `for a ${isTwoTailed ? 'two-tailed' : 'one-tailed'} comparison.`;
 
     document.getElementById('c6i2outdesc').textContent = desc;
 }
