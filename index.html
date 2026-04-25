@@ -38,6 +38,9 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
         }
 
         /* Tab Navigation */
@@ -104,7 +107,7 @@
         /* Content Area */
         .content-area {
             display: grid;
-            grid-template-columns: 350px 1fr;
+            grid-template-columns: 250px 1fr;
             gap: 20px;
             margin-top: 20px;
         }
@@ -256,6 +259,77 @@
             display: none !important;
         }
 
+        .vertical-menu {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .menu-chapter {
+            margin-bottom: 10px;
+        }
+
+        .menu-chapter summary {
+            font-weight: bold;
+            color: #800080;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            list-style: none;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+
+        .menu-chapter summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .menu-chapter summary::before {
+            content: "▶ ";
+            font-size: 0.8rem;
+            color: #800080;
+        }
+
+        .menu-chapter[open] summary::before {
+            content: "▼ ";
+        }
+
+        .menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            transition: background 0.3s;
+            color: #5a0d81;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+        }
+
+        .menu-item.active {
+            background: purple;
+            color: white;
+        }
+
+        .content-wrapper {
+            /* nothing */
+        }
+
+        .horizontal-subsections {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .horizontal-subsections .sub-content {
+            flex: 1;
+            min-width: 400px;
+        }
+
         .log-section {
             background: #333;
             color: #0f0;
@@ -276,16 +350,14 @@
         }
 
         @media (max-width: 768px) {
-            .content-area {
+            .container {
                 grid-template-columns: 1fr;
             }
-            
-            .main-tabs {
-                flex-direction: column;
+            .vertical-menu {
+                display: none;
             }
-            
-            .sub-tabs {
-                flex-direction: column;
+            .content-area {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -296,31 +368,85 @@
     </nav>
 
     <div class="container">
-        <!-- Main Navigation Tabs -->
-        <div class="main-tabs">
-            <div class="main-tab active" data-main="chapter3">Descriptive Studies</div>
-            <div class="main-tab" data-main="chapter4">Comparing with a Reference</div>
-            <div class="main-tab" data-main="chapter5">Independent Proportions</div>
-            <div class="main-tab" data-main="chapter6">Independent Means</div>
-            <div class="main-tab" data-main="chapter7">Comparison of k (>2) Groups</div>
-            <div class="main-tab" data-main="chapter8">Paired Comparison of Means</div>
-            <div class="main-tab" data-main="chapter9">Paired Comparison of Proportions</div>
-            <div class="main-tab" data-main="chapter10">Correlation Studies</div>
-            <div class="main-tab" data-main="chapter11" data-subdefault="c11i1" data-group="11a">Diagnostic Tests - Estimation</div>
-            <div class="main-tab" data-main="chapter11" data-subdefault="c11i3" data-group="11b">Comparing Sensitivity/Specificity</div>
-            <div class="main-tab" data-main="chapter11" data-subdefault="c11i6" data-group="11c">Comparing Two Diagnostic Tests</div>
-            <div class="main-tab" data-main="chapter11" data-subdefault="c11i8" data-group="11d">Comparing two ROC curves</div>
-            <div class="main-tab" data-main="chapter12">Survial Studies</div>
+        <div class="vertical-menu">
+            <details class="menu-chapter" open>
+                <summary>Descriptive Studies</summary>
+                <div class="menu-item active" data-sub="c3i1" data-chapter="chapter3">Estimating a Single Proportion</div>
+                <div class="menu-item" data-sub="c3i2" data-chapter="chapter3">Estimating a Single Mean</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Comparing with a Reference</summary>
+                <div class="menu-item" data-sub="c4i1" data-chapter="chapter4">Single Proportion</div>
+                <div class="menu-item" data-sub="c4i2" data-chapter="chapter4">Single Mean</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Independent Proportions</summary>
+                <div class="menu-item" data-sub="c5i1" data-chapter="chapter5">Two Proportions</div>
+                <div class="menu-item" data-sub="c5i2" data-chapter="chapter5">Cohen's h method</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Independent Means</summary>
+                <div class="menu-item" data-sub="c6i1" data-chapter="chapter6">Two Means</div>
+                <div class="menu-item" data-sub="c6i2" data-chapter="chapter6">Cohen's d method</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Comparison of k (>2) Groups</summary>
+                <div class="menu-item" data-sub="c7i1" data-chapter="chapter7">Pairwise Proportions - Bonferroni</div>
+                <div class="menu-item" data-sub="c7i2" data-chapter="chapter7">Pairwise Means - Bonferroni</div>
+                <div class="menu-item" data-sub="c7i3" data-chapter="chapter7">ANOVA method</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Paired Comparison of Means</summary>
+                <div class="menu-item" data-sub="c8i1" data-chapter="chapter8">Using Mean, SD and correlation</div>
+                <div class="menu-item" data-sub="c8i2" data-chapter="chapter8">Method of Differences</div>
+                <div class="menu-item" data-sub="c8i3" data-chapter="chapter8">Cohen's method</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Paired Comparison of Proportions</summary>
+                <div class="menu-item" data-sub="c9i1" data-chapter="chapter9">Method of Discordant pairs</div>
+                <div class="menu-item" data-sub="c9i2" data-chapter="chapter9">Odds Ratio Method</div>
+                <div class="menu-item" data-sub="c9i3" data-chapter="chapter9">Cohen's Kappa Estimation</div>
+                <div class="menu-item" data-sub="c9i4" data-chapter="chapter9">Compare Two Kappa Values</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Correlation Studies</summary>
+                <div class="menu-item" data-sub="c10i1" data-chapter="chapter10">Estimating Correlation Coefficient</div>
+                <div class="menu-item" data-sub="c10i2" data-chapter="chapter10">Comparing two Correlation Coefficients</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Diagnostic Tests - Estimation</summary>
+                <div class="menu-item" data-sub="c11i1" data-chapter="chapter11">Sensitivity Estimation</div>
+                <div class="menu-item" data-sub="c11i2" data-chapter="chapter11">Specificity Estimation</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Comparing Sensitivity/Specificity</summary>
+                <div class="menu-item" data-sub="c11i3" data-chapter="chapter11">Sensitivity/Specificity</div>
+                <div class="menu-item" data-sub="c11i4" data-chapter="chapter11">Specificity Comparison</div>
+                <div class="menu-item" data-sub="c11i5" data-chapter="chapter11">Sensitivity & Specificity Comparison</div>
+                <div class="menu-item" data-sub="c11i7" data-chapter="chapter11">Sensitivity Comparison</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Comparing Two Diagnostic Tests</summary>
+                <div class="menu-item" data-sub="c11i6" data-chapter="chapter11">Two tests - Paired Design</div>
+                <div class="menu-item" data-sub="c11i7" data-chapter="chapter11">Two tests - Unpaired Design</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Comparing two ROC curves</summary>
+                <div class="menu-item" data-sub="c11i8" data-chapter="chapter11">Two AUC's - Unpaired Comparison</div>
+                <div class="menu-item" data-sub="c11i9" data-chapter="chapter11">Two AUC's - Paired Comparison</div>
+            </details>
+            <details class="menu-chapter">
+                <summary>Survival Studies</summary>
+                <div class="menu-item" data-sub="c12i1" data-chapter="chapter12">Kaplan Meier Estimate</div>
+                <div class="menu-item" data-sub="c12i2" data-chapter="chapter12">Compare Median Survival Times</div>
+                <div class="menu-item" data-sub="c12i3" data-chapter="chapter12">Compare Independent Survival Rates</div>
+                <div class="menu-item" data-sub="c12i4" data-chapter="chapter12">Cox PH Model with Covariates</div>
+            </details>
         </div>
+        <div class="content-wrapper">
 
         <!-- Chapter 3 Content -->
-        <div id="chapter3" class="chapter-content">
-            <!-- Sub tabs for Chapter 3 -->
-            <div class="sub-tabs">
-                <div class="sub-tab active" data-sub="c3i1">Estimating a Single Proportion</div>
-                <div class="sub-tab" data-sub="c3i2">Estimating a Single Mean</div>
-            </div>
-
+        <div id="chapter3" class="chapter-content hidden">
             <!-- Tab 1: Estimating a Single Proportion -->
             <div id="c3i1" class="sub-content">
                 <div class="content-area">
@@ -329,7 +455,7 @@
                         <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
                         
                         <div class="input-group">
-                            <label>Anticipated Proportion (p%)</label>
+                            <label>Anticipated Proportion (p)</label>
                             <input type="number" id="c3i1p" min="0" max="1" step="0.01" value="0.15">
                         </div>
 
@@ -373,6 +499,10 @@
 
                         <div class="result-label">Adjusted sample size for finite population</div>
                         <div class="result-value" id="c3i1adjsize">-</div>
+
+                        <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                        </h4>
 
                         <div class="interpretation" id="c3i1desc">
                             Waiting for inputs...
@@ -451,6 +581,10 @@
                         <div class="result-label">Adjusted sample size for finite population</div>
                         <div class="result-value" id="c3i2adjsize">-</div>
 
+                        <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                        </h4>
+
                         <div class="interpretation" id="c3i2desc">
                             Waiting for inputs...
                         </div>
@@ -474,6 +608,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+
         </div>
 
         <!-- Development Log (hidden but present) -->
@@ -558,35 +694,46 @@
                 // Trigger calculation based on which tab is active
                 if (rangeId.includes('c3i1')) updateC3i1();
                 if (rangeId.includes('c3i2')) updateC3i2();
+                if (rangeId.includes('c4i1')) updateC4i1();
+                if (rangeId.includes('c4i2')) updateC4i2();
+                if (rangeId.includes('c5i1')) updateC5i1();
+                if (rangeId.includes('c5i2')) updateC5i2();
+                if (rangeId.includes('c6i1')) updateC6i1();
+                if (rangeId.includes('c6i2')) updateC6i2();
+                if (rangeId.includes('c7i1')) updateC7i1();
+                if (rangeId.includes('c8i1')) updateC8i1();
             });
         }
 
-        // Tab switching logic
-        document.querySelectorAll('.main-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+        // Menu item switching
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
-                // In a full implementation, you'd show/hide chapter contents
-                // For demo, we're only implementing chapter 3
-            });
-        });
-
-        // Sub-tab switching for Chapter 3
-        document.querySelectorAll('.sub-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const parent = this.closest('.chapter-content');
-                document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
+                const chapterId = this.dataset.chapter;
                 const subId = this.dataset.sub;
-                parent.querySelectorAll('.sub-content').forEach(content => {
-                    content.classList.add('hidden');
-                });
+                // Hide all chapters
+                document.querySelectorAll('.chapter-content').forEach(ch => ch.classList.add('hidden'));
+                // Show the active chapter
+                document.getElementById(chapterId).classList.remove('hidden');
+                // Hide all sub-contents
+                document.querySelectorAll('.sub-content').forEach(content => content.classList.add('hidden'));
+                // Show the active sub-content
                 document.getElementById(subId).classList.remove('hidden');
-                
-                // Trigger calculation for the active tab
+                // Trigger calculation
                 if (subId === 'c3i1') updateC3i1();
                 if (subId === 'c3i2') updateC3i2();
+                if (subId === 'c4i1') updateC4i1();
+                if (subId === 'c4i2') updateC4i2();
+                if (subId === 'c5i1') updateC5i1();
+                if (subId === 'c5i2') updateC5i2();
+                if (subId === 'c6i1') updateC6i1();
+                if (subId === 'c6i2') updateC6i2();
+                if (subId === 'c7i1') updateC7i1();
+                if (subId === 'c8i1') updateC8i1();
+                if (subId === 'c8i2') updateC8i2();
+                if (subId === 'c8i3') updateC8i3();
+                // Add for others as implemented
             });
         });
 
@@ -658,6 +805,21 @@
             setupInputListeners();
             updateC3i1();
             updateC3i2();
+            addChapter4UI();
+            addChapter5UI();
+            addChapter6UI();
+            addChapter7UI();
+            addChapter8UI();
+            updateC8i1();
+            updateC8i2();
+            updateC8i3();
+            addChapter9UI();
+            addChapter10UI();
+            addChapter11UI();
+            addChapter12UI();
+            // Show initial
+            document.getElementById('chapter3').classList.remove('hidden');
+            document.getElementById('c3i1').classList.remove('hidden');
         };
     </script>
     <script>
@@ -667,14 +829,8 @@
 function addChapter4UI() {
     const chapter4HTML = `
     <div id="chapter4" class="chapter-content hidden">
-        <!-- Sub tabs for Chapter 4 -->
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch4="c4i1">Single Proportion</div>
-            <div class="sub-tab" data-sub-ch4="c4i2">Single Mean</div>
-        </div>
-
         <!-- Tab 1: Single Proportion -->
-        <div id="c4i1" class="sub-content-ch4">
+        <div id="c4i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -734,6 +890,10 @@ function addChapter4UI() {
                     <div class="result-label">Adjusted for Finite Population</div>
                     <div class="result-value" id="c4i1adjfinpopsamplesize">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c4i1outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -757,7 +917,7 @@ function addChapter4UI() {
         </div>
 
         <!-- Tab 2: Single Mean -->
-        <div id="c4i2" class="sub-content-ch4 hidden">
+        <div id="c4i2" class="sub-content hidden">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -822,6 +982,10 @@ function addChapter4UI() {
                     <div class="result-label">Adjusted for Finite Population</div>
                     <div class="result-value" id="c4i2adjfinpopsamplesize">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c4i2outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -846,7 +1010,23 @@ function addChapter4UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter4HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter4HTML);
+
+    // Add event listeners for chapter 4
+    ['c4i1p', 'c4i1pstar', 'c4i1alpha', 'c4i1beta', 'c4i1N', 'c4i1att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC4i1);
+    });
+    ['c4i2mu0', 'c4i2mu1', 'c4i2sd', 'c4i2alpha', 'c4i2beta', 'c4i2N', 'c4i2att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC4i2);
+    });
+    document.querySelectorAll('input[name="c4i1rd"]').forEach(radio => radio.addEventListener('change', updateC4i1));
+    document.querySelectorAll('input[name="c4i2rd"]').forEach(radio => radio.addEventListener('change', updateC4i2));
+    updateRangeDisplay('c4i1alpha', 'c4i1alphaVal');
+    updateRangeDisplay('c4i1beta', 'c4i1betaVal');
+    updateRangeDisplay('c4i1att', 'c4i1attVal');
+    updateRangeDisplay('c4i2alpha', 'c4i2alphaVal');
+    updateRangeDisplay('c4i2beta', 'c4i2betaVal');
+    updateRangeDisplay('c4i2att', 'c4i2attVal');
 }
 
 // ==================== Chapter 4 Calculation Functions ====================
@@ -923,13 +1103,8 @@ function updateC4i2() {
 function addChapter5UI() {
     const chapter5HTML = `
     <div id="chapter5" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch5="c5i1">Two Proportions</div>
-            <div class="sub-tab" data-sub-ch5="c5i2">Cohen's h method</div>
-        </div>
-
         <!-- Tab 1: Two Proportions -->
-        <div id="c5i1" class="sub-content-ch5">
+        <div id="c5i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -989,6 +1164,10 @@ function addChapter5UI() {
                     <div class="result-label">Sample Size n₂</div>
                     <div class="result-value" id="c5i1size2">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c5i1outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -1011,7 +1190,7 @@ function addChapter5UI() {
         </div>
 
         <!-- Tab 2: Cohen's h method -->
-        <div id="c5i2" class="sub-content-ch5 hidden">
+        <div id="c5i2" class="sub-content hidden">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -1066,6 +1245,10 @@ function addChapter5UI() {
                     <div class="result-label">Sample Size n₂</div>
                     <div class="result-value" id="c5i2size2">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c5i2outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -1089,7 +1272,23 @@ function addChapter5UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter5HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter5HTML);
+
+    // Add event listeners for chapter 5
+    ['c5i1p1', 'c5i1p2', 'c5i1k', 'c5i1alpha', 'c5i1beta', 'c5i1att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC5i1);
+    });
+    ['c5i2h', 'c5i2k', 'c5i2alpha', 'c5i2beta', 'c5i2att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC5i2);
+    });
+    document.querySelectorAll('input[name="c5i1rd"]').forEach(radio => radio.addEventListener('change', updateC5i1));
+    document.querySelectorAll('input[name="c5i2rd"]').forEach(radio => radio.addEventListener('change', updateC5i2));
+    updateRangeDisplay('c5i1alpha', 'c5i1alphaVal');
+    updateRangeDisplay('c5i1beta', 'c5i1betaVal');
+    updateRangeDisplay('c5i1att', 'c5i1attVal');
+    updateRangeDisplay('c5i2alpha', 'c5i2alphaVal');
+    updateRangeDisplay('c5i2beta', 'c5i2betaVal');
+    updateRangeDisplay('c5i2att', 'c5i2attVal');
 }
 
 // ==================== Chapter 5 Calculation Functions ====================
@@ -1162,13 +1361,8 @@ function updateC5i2() {
 function addChapter6UI() {
     const chapter6HTML = `
     <div id="chapter6" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch6="c6i1">Two Means</div>
-            <div class="sub-tab" data-sub-ch6="c6i2">Cohen's d method</div>
-        </div>
-
         <!-- Tab 1: Two Means -->
-        <div id="c6i1" class="sub-content-ch6">
+        <div id="c6i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -1238,6 +1432,10 @@ function addChapter6UI() {
                     <div class="result-label">Sample Size n₂</div>
                     <div class="result-value" id="c6i1size2">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c6i1outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -1260,7 +1458,7 @@ function addChapter6UI() {
         </div>
 
         <!-- Tab 2: Cohen's d method -->
-        <div id="c6i2" class="sub-content-ch6 hidden">
+        <div id="c6i2" class="sub-content hidden">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -1315,6 +1513,10 @@ function addChapter6UI() {
                     <div class="result-label">Sample Size n₂</div>
                     <div class="result-value" id="c6i2size2">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c6i2outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -1339,7 +1541,23 @@ function addChapter6UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter6HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter6HTML);
+
+    // Add event listeners for chapter 6
+    ['c6i1m1', 'c6i1m2', 'c6i1s1', 'c6i1s2', 'c6i1k', 'c6i1alpha', 'c6i1beta', 'c6i1att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC6i1);
+    });
+    ['c6i2d', 'c6i2k', 'c6i2alpha', 'c6i2beta', 'c6i2att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC6i2);
+    });
+    document.querySelectorAll('input[name="c6i1rd"]').forEach(radio => radio.addEventListener('change', updateC6i1));
+    document.querySelectorAll('input[name="c6i2rd"]').forEach(radio => radio.addEventListener('change', updateC6i2));
+    updateRangeDisplay('c6i1alpha', 'c6i1alphaVal');
+    updateRangeDisplay('c6i1beta', 'c6i1betaVal');
+    updateRangeDisplay('c6i1att', 'c6i1attVal');
+    updateRangeDisplay('c6i2alpha', 'c6i2alphaVal');
+    updateRangeDisplay('c6i2beta', 'c6i2betaVal');
+    updateRangeDisplay('c6i2att', 'c6i2attVal');
 }
 
 // ==================== Chapter 6 Calculation Functions ====================
@@ -1655,15 +1873,9 @@ window.onload = function() {
 
 function addChapter7UI() {
     const chapter7HTML = `
-    <div id="chapter7" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch7="c7i1">Pairwise Proportions-Bonferroni</div>
-            <div class="sub-tab" data-sub-ch7="c7i2">Pairwise Means-Bonferroni</div>
-            <div class="sub-tab" data-sub-ch7="c7i3">ANOVA method</div>
-        </div>
-
-        <!-- Tab 1: Pairwise Proportions-Bonferroni -->
-        <div id="c7i1" class="sub-content-ch7">
+    <div id="chapter7" class="chapter-content hidden horizontal-subsections">
+        <!-- Tab 1: Multiple Groups -->
+        <div id="c7i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -1726,6 +1938,10 @@ function addChapter7UI() {
                     <div class="result-label">Sample Size per Group</div>
                     <div class="result-value" id="c7i1size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c7i1outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -1747,8 +1963,7 @@ function addChapter7UI() {
             </div>
         </div>
 
-        <!-- Tab 2: Pairwise Means-Bonferroni -->
-        <div id="c7i2" class="sub-content-ch7 hidden">
+        <div id="c7i2" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -1816,6 +2031,10 @@ function addChapter7UI() {
                     <div class="result-label">Sample Size per Group</div>
                     <div class="result-value" id="c7i2size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c7i2outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -1838,7 +2057,7 @@ function addChapter7UI() {
         </div>
 
         <!-- Tab 3: ANOVA method -->
-        <div id="c7i3" class="sub-content-ch7 hidden">
+        <div id="c7i3" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -1888,6 +2107,10 @@ function addChapter7UI() {
                     <div class="result-label">Sample Size per Group</div>
                     <div class="result-value" id="c7i3size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c7i3outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -1908,7 +2131,36 @@ function addChapter7UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter7HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter7HTML);
+
+    // Add event listeners for chapter 7
+    ['c7i1count', 'c7i1props', 'c7i1pairs', 'c7i1alpha', 'c7i1beta', 'c7i1att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC7i1);
+    });
+    document.querySelectorAll('input[name="c7i1rd"]').forEach(radio => radio.addEventListener('change', updateC7i1));
+    updateRangeDisplay('c7i1alpha', 'c7i1alphaVal');
+    updateRangeDisplay('c7i1beta', 'c7i1betaVal');
+    updateRangeDisplay('c7i1att', 'c7i1attVal');
+
+    ['c7i2count', 'c7i2means', 'c7i2sd', 'c7i2pairs', 'c7i2alpha', 'c7i2beta', 'c7i2att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC7i2);
+    });
+    document.querySelectorAll('input[name="c7i2rd"]').forEach(radio => radio.addEventListener('change', updateC7i2));
+    updateRangeDisplay('c7i2count', 'c7i2countVal');
+    updateRangeDisplay('c7i2alpha', 'c7i2alphaVal');
+    updateRangeDisplay('c7i2beta', 'c7i2betaVal');
+    updateRangeDisplay('c7i2att', 'c7i2attVal');
+
+    ['c7i3means', 'c7i3sd', 'c7i3alpha', 'c7i3beta', 'c7i3att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC7i3);
+    });
+    updateRangeDisplay('c7i3alpha', 'c7i3alphaVal');
+    updateRangeDisplay('c7i3beta', 'c7i3betaVal');
+    updateRangeDisplay('c7i3att', 'c7i3attVal');
+
+    // Initial calculations
+    updateC7i2();
+    updateC7i3();
 }
 
 // ==================== Chapter 7 Calculation Functions ====================
@@ -1973,6 +2225,7 @@ function updateC7i1() {
 }
 
 function updateC7i2() {
+    try {
     const meansStr = document.getElementById('c7i2means').value;
     const sd = getNum('c7i2sd');
     const pairsStr = document.getElementById('c7i2pairs').value;
@@ -2026,6 +2279,9 @@ function updateC7i2() {
     
     const desc = `With the given anticipated group means (${means.map(m => m.toFixed(2)).join(', ')}) and common SD ${sd}, the minimum sample size required for the selected ${m} comparisons is at least ${maxN} (${Math.ceil(maxN*(1+att))} with attrition of ${att*100}%) with ${(1-alpha)*100}% confidence and ${(1-beta)*100}% power.`;
     document.getElementById('c7i2outdesc').textContent = desc;
+    } catch(e) {
+        document.getElementById('c7i2outdesc').textContent = 'Error: ' + e.message;
+    }
 }
 
 // Approximate F distribution critical values for ANOVA
@@ -2158,6 +2414,7 @@ function qchisq1(p) {
 }
 
 function updateC7i3() {
+    try {
     const meansStr = document.getElementById('c7i3means').value;
     const sd = getNum('c7i3sd');
     const alpha = (100 - getNum('c7i3alpha')) / 100;
@@ -2202,21 +2459,16 @@ function updateC7i3() {
 
     const desc = `With the given anticipated group means (${means.map(m => m.toFixed(2)).join(', ')}) and standard deviation ${sd}, the minimum sample size required for comparing the ${k} groups is at least ${n} (${Math.ceil(n * (1 + att))} with attrition of ${att * 100}%) with ${(1 - alpha) * 100}% confidence and ${(1 - beta) * 100}% power.`;
     document.getElementById('c7i3outdesc').textContent = desc;
+    } catch(e) {
+        document.getElementById('c7i3outdesc').textContent = 'Error: ' + e.message;
+    }
 }
-
-// ==================== Chapter 8: Paired Comparison of Means ====================
 
 function addChapter8UI() {
     const chapter8HTML = `
-    <div id="chapter8" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch8="c8i1">Using Mean, SD and correlation</div>
-            <div class="sub-tab" data-sub-ch8="c8i2">Method of Differences</div>
-            <div class="sub-tab" data-sub-ch8="c8i3">Cohen's method</div>
-        </div>
-
+    <div id="chapter8" class="chapter-content hidden horizontal-subsections">
         <!-- Tab 1: Using Mean, SD and correlation -->
-        <div id="c8i1" class="sub-content-ch8">
+        <div id="c8i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -2283,6 +2535,10 @@ function addChapter8UI() {
                     <div class="result-label">Sample Size</div>
                     <div class="result-value" id="c8i1size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c8i1outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -2303,9 +2559,8 @@ function addChapter8UI() {
                 </div>
             </div>
         </div>
-
-        <!-- Tab 2: Method of Differences -->
-        <div id="c8i2" class="sub-content-ch8 hidden">
+    </div>
+        <div id="c8i2" class="sub-content hidden">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -2357,6 +2612,10 @@ function addChapter8UI() {
                     <div class="result-label">Sample Size</div>
                     <div class="result-value" id="c8i2size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c8i2outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -2376,7 +2635,7 @@ function addChapter8UI() {
         </div>
 
         <!-- Tab 3: Cohen's method -->
-        <div id="c8i3" class="sub-content-ch8 hidden">
+        <div id="c8i3" class="sub-content hidden">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -2423,6 +2682,10 @@ function addChapter8UI() {
                     <div class="result-label">Sample Size</div>
                     <div class="result-value" id="c8i3size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c8i3outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -2446,7 +2709,30 @@ function addChapter8UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter8HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter8HTML);
+
+    // Add event listeners for chapter 8
+    ['c8i1m1', 'c8i1m2', 'c8i1s1', 'c8i1s2', 'c8i1r', 'c8i1alpha', 'c8i1beta', 'c8i1att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC8i1);
+    });
+    document.querySelectorAll('input[name="c8i1rd"]').forEach(radio => radio.addEventListener('change', updateC8i1));
+    ['c8i2md', 'c8i2sd', 'c8i2alpha', 'c8i2beta', 'c8i2att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC8i2);
+    });
+    document.querySelectorAll('input[name="c8i2rd"]').forEach(radio => radio.addEventListener('change', updateC8i2));
+    ['c8i3d', 'c8i3alpha', 'c8i3beta', 'c8i3att'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateC8i3);
+    });
+    document.querySelectorAll('input[name="c8i3rd"]').forEach(radio => radio.addEventListener('change', updateC8i3));
+    updateRangeDisplay('c8i1alpha', 'c8i1alphaVal');
+    updateRangeDisplay('c8i1beta', 'c8i1betaVal');
+    updateRangeDisplay('c8i1att', 'c8i1attVal');
+    updateRangeDisplay('c8i2alpha', 'c8i2alphaVal');
+    updateRangeDisplay('c8i2beta', 'c8i2betaVal');
+    updateRangeDisplay('c8i2att', 'c8i2attVal');
+    updateRangeDisplay('c8i3alpha', 'c8i3alphaVal');
+    updateRangeDisplay('c8i3beta', 'c8i3betaVal');
+    updateRangeDisplay('c8i3att', 'c8i3attVal');
 }
 
 // ==================== Chapter 8 Calculation Functions ====================
@@ -2539,20 +2825,11 @@ function updateC8i3() {
     document.getElementById('c8i3outdesc').textContent = desc;
 }
 
-// ==================== Chapter 9: Paired Comparison of Proportions ====================
-
 function addChapter9UI() {
     const chapter9HTML = `
-    <div id="chapter9" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch9="c9i1">Method of Discordant pairs</div>
-            <div class="sub-tab" data-sub-ch9="c9i2">Odds Ratio Method</div>
-            <div class="sub-tab" data-sub-ch9="c9i3">Cohen's Kappa Estimation</div>
-            <div class="sub-tab" data-sub-ch9="c9i4">Compare Two Kappa Values</div>
-        </div>
-
+    <div id="chapter9" class="chapter-content hidden horizontal-subsections">
         <!-- Tab 1: Method of Discordant pairs -->
-        <div id="c9i1" class="sub-content-ch9">
+        <div id="c9i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -2604,6 +2881,10 @@ function addChapter9UI() {
                     <div class="result-label">Sample Size (pairs)</div>
                     <div class="result-value" id="c9i1size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c9i1outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -2624,7 +2905,7 @@ function addChapter9UI() {
         </div>
 
         <!-- Tab 2: Odds Ratio Method -->
-        <div id="c9i2" class="sub-content-ch9 hidden">
+        <div id="c9i2" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -2698,7 +2979,7 @@ function addChapter9UI() {
         </div>
 
         <!-- Tab 3: Cohen's Kappa Estimation -->
-        <div id="c9i3" class="sub-content-ch9 hidden">
+        <div id="c9i3" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -2769,7 +3050,7 @@ function addChapter9UI() {
         </div>
 
         <!-- Tab 4: Compare Two Kappa Values -->
-        <div id="c9i4" class="sub-content-ch9 hidden">
+        <div id="c9i4" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -2851,7 +3132,18 @@ function addChapter9UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter9HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter9HTML);
+    updateRangeDisplay('c9i1alpha', 'c9i1alphaVal');
+    updateRangeDisplay('c9i1beta', 'c9i1betaVal');
+    updateRangeDisplay('c9i1att', 'c9i1attVal');
+    updateRangeDisplay('c9i2alpha', 'c9i2alphaVal');
+    updateRangeDisplay('c9i2beta', 'c9i2betaVal');
+    updateRangeDisplay('c9i2att', 'c9i2attVal');
+    updateRangeDisplay('c9i3alpha', 'c9i3alphaVal');
+    updateRangeDisplay('c9i3att', 'c9i3attVal');
+    updateRangeDisplay('c9i4alpha', 'c9i4alphaVal');
+    updateRangeDisplay('c9i4beta', 'c9i4betaVal');
+    updateRangeDisplay('c9i4att', 'c9i4attVal');
 }
 
 // ==================== Chapter 9 Calculation Functions ====================
@@ -3211,11 +3503,6 @@ function setupAdditionalChapterTabs() {
     });
 }
 
-// Add all new chapters
-addChapter7UI();
-addChapter8UI();
-addChapter9UI();
-
 // Extend the initialization
 const originalSetup = window.onload;
 window.onload = function() {
@@ -3224,31 +3511,120 @@ window.onload = function() {
     extendSetupNewInputListeners();
     
     // Initial calculations for new chapters
-    updateC7i1();
-    updateC7i2();
-    updateC7i3();
-    updateC8i1();
-    updateC8i2();
-    updateC8i3();
-    updateC9i1();
-    updateC9i2();
-    updateC9i3();
-    updateC9i4();
+    try { updateC7i1(); } catch(e) { console.log(e); }
+    try { updateC8i1(); } catch(e) { console.log(e); }
+    try { updateC8i2(); } catch(e) { console.log(e); }
+    try { updateC8i3(); } catch(e) { console.log(e); }
+    try { updateC9i1(); } catch(e) { console.log(e); }
+    try { updateC9i2(); } catch(e) { console.log(e); }
+    try { updateC9i3(); } catch(e) { console.log(e); }
+    try { updateC9i4(); } catch(e) { console.log(e); }
+    try { updateC10i1(); } catch(e) { console.log(e); }
+    try { updateC10i2(); } catch(e) { console.log(e); }
+    updateC11i1();
+    updateC11i2();
+    updateC11i3();
+    updateC11i4();
+    updateC11i5();
+    updateC11i6();
+    updateC11i7();
+    updateC11i8();
+    updateC11i9();
+    updateC12i1();
+    updateC12i2();
+    updateC12i3();
+    updateC12i4();
 };
+
+function extendSetupNewInputListeners() {
+    // Chapter 7
+    ['c7i1', 'c7i2', 'c7i3'].forEach(subId => {
+        const inputs = document.querySelectorAll(`#${subId} input, #${subId} select`);
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (subId === 'c7i1') updateC7i1();
+                else if (subId === 'c7i2') updateC7i2();
+                else if (subId === 'c7i3') updateC7i3();
+            });
+        });
+    });
+
+    // Chapter 8
+    ['c8i1', 'c8i2', 'c8i3'].forEach(subId => {
+        const inputs = document.querySelectorAll(`#${subId} input, #${subId} select`);
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (subId === 'c8i1') updateC8i1();
+                else if (subId === 'c8i2') updateC8i2();
+                else if (subId === 'c8i3') updateC8i3();
+            });
+        });
+    });
+
+    // Chapter 9
+    ['c9i1', 'c9i2', 'c9i3', 'c9i4'].forEach(subId => {
+        const inputs = document.querySelectorAll(`#${subId} input, #${subId} select`);
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (subId === 'c9i1') updateC9i1();
+                else if (subId === 'c9i2') updateC9i2();
+                else if (subId === 'c9i3') updateC9i3();
+                else if (subId === 'c9i4') updateC9i4();
+            });
+        });
+    });
+
+    // Chapter 10
+    ['c10i1', 'c10i2'].forEach(subId => {
+        const inputs = document.querySelectorAll(`#${subId} input, #${subId} select`);
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (subId === 'c10i1') updateC10i1();
+                else if (subId === 'c10i2') updateC10i2();
+            });
+        });
+    });
+
+    // Chapter 11
+    ['c11i1', 'c11i2', 'c11i3', 'c11i4', 'c11i5', 'c11i6', 'c11i7', 'c11i8', 'c11i9'].forEach(subId => {
+        const inputs = document.querySelectorAll(`#${subId} input, #${subId} select`);
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (subId === 'c11i1') updateC11i1();
+                else if (subId === 'c11i2') updateC11i2();
+                else if (subId === 'c11i3') updateC11i3();
+                else if (subId === 'c11i4') updateC11i4();
+                else if (subId === 'c11i5') updateC11i5();
+                else if (subId === 'c11i6') updateC11i6();
+                else if (subId === 'c11i7') updateC11i7();
+                else if (subId === 'c11i8') updateC11i8();
+                else if (subId === 'c11i9') updateC11i9();
+            });
+        });
+    });
+
+    // Chapter 12
+    ['c12i1', 'c12i2', 'c12i3', 'c12i4'].forEach(subId => {
+        const inputs = document.querySelectorAll(`#${subId} input, #${subId} select`);
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (subId === 'c12i1') updateC12i1();
+                else if (subId === 'c12i2') updateC12i2();
+                else if (subId === 'c12i3') updateC12i3();
+                else if (subId === 'c12i4') updateC12i4();
+            });
+        });
+    });
+}
     </script>
     <script>
         // ==================== Chapter 10: Correlation Studies ====================
 
 function addChapter10UI() {
     const chapter10HTML = `
-    <div id="chapter10" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch10="c10i1">Estimating Correlation Coefficient</div>
-            <div class="sub-tab" data-sub-ch10="c10i2">Comparing two Correlation Coefficients</div>
-        </div>
-
+    <div id="chapter10" class="chapter-content hidden horizontal-subsections">
         <!-- Tab 1: Estimating Correlation Coefficient -->
-        <div id="c10i1" class="sub-content-ch10">
+        <div id="c10i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3296,6 +3672,10 @@ function addChapter10UI() {
                     <div class="result-label">Sample Size</div>
                     <div class="result-value" id="c10i1size">-</div>
 
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                            <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
                     <div class="interpretation" id="c10i1outdesc">Waiting for inputs...</div>
 
                     <div class="formula-box">
@@ -3315,7 +3695,7 @@ function addChapter10UI() {
         </div>
 
         <!-- Tab 2: Comparing two Correlation Coefficients -->
-        <div id="c10i2" class="sub-content-ch10 hidden">
+        <div id="c10i2" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3390,7 +3770,7 @@ function addChapter10UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter10HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter10HTML);
 }
 
 // ==================== Chapter 10 Calculation Functions ====================
@@ -3470,21 +3850,9 @@ function updateC10i2() {
 
 function addChapter11UI() {
     const chapter11HTML = `
-    <div id="chapter11" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch11="c11i1" data-group="11a">Sensitivity Estimation</div>
-            <div class="sub-tab" data-sub-ch11="c11i2" data-group="11a">Specificity Estimation</div>
-            <div class="sub-tab" data-sub-ch11="c11i3" data-group="11b">Sensitivity Comparison</div>
-            <div class="sub-tab" data-sub-ch11="c11i4" data-group="11b">Specificity Comparison</div>
-            <div class="sub-tab" data-sub-ch11="c11i5" data-group="11b">Sensitivity & Specificity Comparison</div>
-            <div class="sub-tab" data-sub-ch11="c11i6" data-group="11c">Two tests - Paired Design</div>
-            <div class="sub-tab" data-sub-ch11="c11i7" data-group="11c">Two tests - Unpaired Design</div>
-            <div class="sub-tab" data-sub-ch11="c11i8" data-group="11d">Two AUC's - Unpaired Comparison</div>
-            <div class="sub-tab" data-sub-ch11="c11i9" data-group="11d">Two AUC's - Paired Comparison</div>
-        </div>
-
+    <div id="chapter11" class="chapter-content hidden horizontal-subsections">
         <!-- Tab 1: Sensitivity Estimation -->
-        <div id="c11i1" class="sub-content-ch11">
+        <div id="c11i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3547,7 +3915,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 2: Specificity Estimation -->
-        <div id="c11i2" class="sub-content-ch11 hidden">
+        <div id="c11i2" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3610,7 +3978,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 3: Sensitivity Comparison -->
-        <div id="c11i3" class="sub-content-ch11 hidden">
+        <div id="c11i3" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3689,7 +4057,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 4: Specificity Comparison -->
-        <div id="c11i4" class="sub-content-ch11 hidden">
+        <div id="c11i4" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3768,7 +4136,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 5: Sensitivity & Specificity Comparison -->
-        <div id="c11i5" class="sub-content-ch11 hidden">
+        <div id="c11i5" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3844,7 +4212,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 6: Two tests - Paired Design -->
-        <div id="c11i6" class="sub-content-ch11 hidden">
+        <div id="c11i6" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -3935,7 +4303,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 7: Two tests - Unpaired Design -->
-        <div id="c11i7" class="sub-content-ch11 hidden">
+        <div id="c11i7" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -4026,7 +4394,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 8: Two AUC's - Unpaired Comparison -->
-        <div id="c11i8" class="sub-content-ch11 hidden">
+        <div id="c11i8" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -4094,7 +4462,7 @@ function addChapter11UI() {
         </div>
 
         <!-- Tab 9: Two AUC's - Paired Comparison -->
-        <div id="c11i9" class="sub-content-ch11 hidden">
+        <div id="c11i9" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -4168,7 +4536,7 @@ function addChapter11UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter11HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter11HTML);
 }
 
 // ==================== Chapter 11 Calculation Functions ====================
@@ -4479,16 +4847,9 @@ function updateC11i9() {
 
 function addChapter12UI() {
     const chapter12HTML = `
-    <div id="chapter12" class="chapter-content hidden">
-        <div class="sub-tabs">
-            <div class="sub-tab active" data-sub-ch12="c12i1">Kaplan Meier Estimate</div>
-            <div class="sub-tab" data-sub-ch12="c12i2">Compare Median Survival Times</div>
-            <div class="sub-tab" data-sub-ch12="c12i3">Compare Independent Survival Rates</div>
-            <div class="sub-tab" data-sub-ch12="c12i4">Cox PH Model with Covariates</div>
-        </div>
-
+    <div id="chapter12" class="chapter-content hidden horizontal-subsections">
         <!-- Tab 1: Kaplan Meier Estimate -->
-        <div id="c12i1" class="sub-content-ch12">
+        <div id="c12i1" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -4546,7 +4907,7 @@ function addChapter12UI() {
         </div>
 
         <!-- Tab 2: Compare Median Survival Times -->
-        <div id="c12i2" class="sub-content-ch12 hidden">
+        <div id="c12i2" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -4625,7 +4986,7 @@ function addChapter12UI() {
         </div>
 
         <!-- Tab 3: Compare Independent Survival Rates -->
-        <div id="c12i3" class="sub-content-ch12 hidden">
+        <div id="c12i3" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -4706,7 +5067,7 @@ function addChapter12UI() {
         </div>
 
         <!-- Tab 4: Cox PH Model with Covariates -->
-        <div id="c12i4" class="sub-content-ch12 hidden">
+        <div id="c12i4" class="sub-content">
             <div class="content-area">
                 <div class="sidebar">
                     <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
@@ -4790,7 +5151,7 @@ function addChapter12UI() {
     </div>
     `;
     
-    document.querySelector('.container').insertAdjacentHTML('beforeend', chapter12HTML);
+    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter12HTML);
 }
 
 // ==================== Chapter 12 Calculation Functions ====================
