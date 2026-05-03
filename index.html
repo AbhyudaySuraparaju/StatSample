@@ -6,6 +6,8 @@
     <title>Sample Size Calculator</title>
     <!-- Font Awesome for icons (optional but nice) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- MathJax CDN for LaTeX rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         * {
             margin: 0;
@@ -39,7 +41,7 @@
             margin: 0 auto;
             padding: 20px;
             display: grid;
-            grid-template-columns: 250px 1fr;
+            grid-template-columns: minmax(240px, 280px) 1fr;
             gap: 20px;
         }
 
@@ -259,12 +261,71 @@
             display: none !important;
         }
 
+        .nav-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+        }
+
         .vertical-menu {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             height: fit-content;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+            width: 260px;
+            max-width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            margin: 0;
+            padding: 12px 18px;
+            background: purple;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+            transition: background 0.2s ease;
+        }
+
+        .menu-toggle:hover {
+            background: #5a0d81;
+        }
+
+        .menu-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1100;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .menu-backdrop.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .vertical-menu.collapsed {
+            transform: translateX(-100%);
+        }
+
+        @media (min-width: 769px) {
+            .vertical-menu,
+            .vertical-menu.collapsed {
+                position: static !important;
+                transform: none !important;
+                display: block !important;
+            }
         }
 
         .menu-chapter {
@@ -352,12 +413,72 @@
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
+                padding: 15px;
             }
+
+            .nav-panel {
+                position: fixed;
+                top: 76px;
+                left: 0;
+                z-index: 1200;
+                width: 100%;
+                max-width: 260px;
+                min-width: 0;
+                height: calc(100vh - 76px);
+                pointer-events: auto;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 76px;
+                left: 16px;
+                width: auto;
+                min-width: 120px;
+                z-index: 1300;
+            }
+
             .vertical-menu {
-                display: none;
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 260px;
+                max-width: 85vw;
+                height: 100%;
+                margin: 0;
+                padding: 16px;
+                transform: translateX(0);
+                transition: transform 0.25s ease;
+                overflow-y: auto;
+                box-shadow: 2px 0 16px rgba(0,0,0,0.18);
+                pointer-events: auto;
+                background: white;
             }
+
             .content-area {
                 grid-template-columns: 1fr;
+            }
+
+            .menu-chapter summary {
+                padding: 12px 14px;
+            }
+
+            .menu-item {
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+
+            .content-wrapper {
+                min-width: 0;
+            }
+
+            .vertical-menu.collapsed {
+                transform: translateX(-100%);
+            }
+
+            .vertical-menu:not(.collapsed) {
+                transform: translateX(0);
             }
         }
     </style>
@@ -367,8 +488,12 @@
         <h1 class="navbar-brand"><i class="fas fa-calculator"></i> Sample Size Determination</h1>
     </nav>
 
+    <div class="menu-backdrop"></div>
+
     <div class="container">
-        <div class="vertical-menu">
+        <div class="nav-panel">
+            <button class="menu-toggle" type="button" aria-expanded="false"><i class="fas fa-bars"></i> Menu</button>
+            <div class="vertical-menu">
             <details class="menu-chapter" open>
                 <summary>Descriptive Studies</summary>
                 <div class="menu-item active" data-sub="c3i1" data-chapter="chapter3">Estimating a Single Proportion</div>
@@ -443,6 +568,7 @@
                 <div class="menu-item" data-sub="c12i4" data-chapter="chapter12">Cox PH Model with Covariates</div>
             </details>
         </div>
+        </div>
         <div class="content-wrapper">
 
         <!-- Chapter 3 Content -->
@@ -507,14 +633,14 @@
                         <div class="interpretation" id="c3i1desc">
                             Waiting for inputs...
                         </div>
-
                         <div class="formula-box">
                             <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
                             <div class="math-formula">
-                                n = p(1-p)Z²<sub>1-α/2</sub> / d²
+                                $$ n = \frac{p(1-p)Z^2_{1-\alpha/2}}{d^2} $$
                             </div>
+
                             <div class="math-formula">
-                                n<sub>adj</sub> = nN / (n + (N-1))
+                                $$ n_{adj} = \frac{nN}{n + (N - 1)} $$
                             </div>
                         </div>
 
@@ -592,10 +718,10 @@
                         <div class="formula-box">
                             <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
                             <div class="math-formula">
-                                n = Z²<sub>1-α/2</sub> s² / d²
+                                $$ n = \frac{Z^2_{1-\alpha/2} s^2}{d^2} $$
                             </div>
                             <div class="math-formula">
-                                n<sub>adj</sub> = nN / (n + (N-1))
+                                $$ n_{adj} = \frac{nN}{n + (N - 1)} $$
                             </div>
                         </div>
 
@@ -734,6 +860,21 @@
                 if (subId === 'c8i2') updateC8i2();
                 if (subId === 'c8i3') updateC8i3();
                 // Add for others as implemented
+
+                // Auto-close mobile menu after selection
+                if (window.innerWidth <= 768) {
+                    const toggleButton = document.querySelector('.menu-toggle');
+                    const verticalMenu = document.querySelector('.vertical-menu');
+                    const backdrop = document.querySelector('.menu-backdrop');
+                    if (toggleButton && verticalMenu) {
+                        verticalMenu.classList.add('collapsed');
+                        toggleButton.setAttribute('aria-expanded', 'false');
+                        toggleButton.innerHTML = '<i class="fas fa-bars"></i> Menu';
+                    }
+                    if (backdrop) {
+                        backdrop.classList.remove('visible');
+                    }
+                }
             });
         });
 
@@ -800,9 +941,66 @@
             updateRangeDisplay('c3i2att', 'c3i2attVal');
         }
 
+        function setupMobileMenuToggle() {
+            const toggleButton = document.querySelector('.menu-toggle');
+            const verticalMenu = document.querySelector('.vertical-menu');
+            if (!toggleButton || !verticalMenu) return;
+
+            const updateMenuState = () => {
+                if (window.innerWidth <= 768) {
+                    // Mobile: start collapsed
+                    verticalMenu.classList.add('collapsed');
+                    toggleButton.setAttribute('aria-expanded', 'false');
+                    toggleButton.style.display = 'block';
+                } else {
+                    // Desktop: always visible, remove collapsed state and hide toggle
+                    verticalMenu.classList.remove('collapsed');
+                    toggleButton.setAttribute('aria-expanded', 'false');
+                    toggleButton.style.display = 'none';
+                }
+            };
+
+            const backdrop = document.querySelector('.menu-backdrop');
+            const showMenu = () => {
+                toggleButton.setAttribute('aria-expanded', 'true');
+                toggleButton.innerHTML = '<i class="fas fa-times"></i> Hide Menu';
+                verticalMenu.classList.remove('collapsed');
+                if (backdrop) backdrop.classList.add('visible');
+            };
+
+            const hideMenu = () => {
+                toggleButton.setAttribute('aria-expanded', 'false');
+                toggleButton.innerHTML = '<i class="fas fa-bars"></i> Menu';
+                verticalMenu.classList.add('collapsed');
+                if (backdrop) backdrop.classList.remove('visible');
+            };
+
+            // Initial setup
+            updateMenuState();
+            
+            // Handle window resize
+            window.addEventListener('resize', updateMenuState);
+
+            // Toggle button click handler
+            toggleButton.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                if (isExpanded) {
+                    hideMenu();
+                } else {
+                    showMenu();
+                }
+            });
+
+            // Backdrop click handler
+            if (backdrop) {
+                backdrop.addEventListener('click', hideMenu);
+            }
+        }
+
         // Initial calculations
         window.onload = function() {
             setupInputListeners();
+            setupMobileMenuToggle();
             updateC3i1();
             updateC3i2();
             addChapter4UI();
@@ -899,10 +1097,10 @@ function addChapter4UI() {
                     <div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
                         <div class="math-formula">
-                            n = [(Z<sub>α/2</sub>√(p*(1-p*)) + Z<sub>β</sub>√(p(1-p))) / (p-p*)]²
+                            $$ n = \\left(\\frac{Z_{1-\\alpha/2} \\sqrt{p^{*}(1-p^{*})} + Z_{1-\\beta} \\sqrt{p(1-p)}}{p - p^{*}}\\right)^{2} $$
                         </div>
                         <div class="math-formula">
-                            n<sub>adj</sub> = nN / (n + (N-1))
+                            $$ n_{adj} = \\frac{nN}{n + (N - 1)} $$
                         </div>
                     </div>
 
@@ -991,10 +1189,10 @@ function addChapter4UI() {
                     <div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
                         <div class="math-formula">
-                            n = σ²(Z<sub>α/2</sub> + Z<sub>β</sub>)² / (μ₁ - μ₀)²
+                            $$ n = \\frac{\\sigma^{2} \\left(Z_{1-\\alpha/2} + Z_{1-\\beta}\\right)^{2}}{(\\mu_{1} - \\mu_{0})^{2}} $$
                         </div>
                         <div class="math-formula">
-                            n<sub>adj</sub> = nN / (n + (N-1))
+                            $$ n_{adj} = \\frac{nN}{n + (N - 1)} $$
                         </div>
                     </div>
 
@@ -1011,6 +1209,14 @@ function addChapter4UI() {
     `;
     
     document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter4HTML);
+    // if (window.MathJax && MathJax.typesetPromise) {
+    //     MathJax.typesetPromise();
+    // }
+    if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetClear(); // clears previous rendering state
+    MathJax.typesetPromise()
+        .catch((err) => console.error("MathJax error:", err));
+}
 
     // Add event listeners for chapter 4
     ['c4i1p', 'c4i1pstar', 'c4i1alpha', 'c4i1beta', 'c4i1N', 'c4i1att'].forEach(id => {
@@ -1170,14 +1376,18 @@ function addChapter5UI() {
 
                     <div class="interpretation" id="c5i1outdesc">Waiting for inputs...</div>
 
-                    <div class="formula-box">
+                    <<div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
-                        <div class="math-formula">
-                            n₂ = [(Z<sub>α/2</sub> + Z<sub>β</sub>)²(p₁(1-p₁)/k + p₂(1-p₂))] / (p₁-p₂)²
-                        </div>
-                        <div class="math-formula">
-                            n₁ = k × n₂
-                        </div>
+
+                        <div class="math-formula">$$
+                        n_{2} = \\frac{\\left(Z_{1-\\alpha/2} + Z_{1-\\beta}\\right)^{2}
+                        \\left(\\frac{p_{1}(1-p_{1})}{k} + p_{2}(1-p_{2})\\right)}
+                        {(p_{1}-p_{2})^{2}}
+                        $$</div>
+
+                        <div class="math-formula">$$
+                        n_{1} = k\\,n_{2}
+                        $$</div>
                     </div>
 
                     <div class="references-box">
@@ -1250,14 +1460,19 @@ function addChapter5UI() {
                     </h4>
 
                     <div class="interpretation" id="c5i2outdesc">Waiting for inputs...</div>
-
                     <div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
+
                         <div class="math-formula">
-                            n₂ = [(Z<sub>α/2</sub> + Z<sub>β</sub>) / h]²
+                        \\[
+                        n_{2} = \\left( \\frac{Z_{1-\\alpha/2} + Z_{1-\\beta}}{h} \\right)^{2}
+                        \\]
                         </div>
+
                         <div class="math-formula">
-                            n₁ = k × n₂
+                        \\[
+                        n_{1} = k \\cdot n_{2}
+                        \\]
                         </div>
                     </div>
 
@@ -1440,11 +1655,18 @@ function addChapter6UI() {
 
                     <div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
+
                         <div class="math-formula">
-                            n₂ = [(ks₁² + s₂²)/k] × [(Z<sub>α/2</sub> + Z<sub>β</sub>) / (μ₁-μ₂)]²
+                        \\[
+                        n_{2} = \\left( \\frac{k s_{1}^{2} + s_{2}^{2}}{k} \\right)
+                        \\left( \\frac{Z_{1-\\alpha/2} + Z_{1-\\beta}}{\\mu_{1} - \\mu_{2}} \\right)^{2}
+                        \\]
                         </div>
+
                         <div class="math-formula">
-                            n₁ = k × n₂
+                        \\[
+                        n_{1} = k \\cdot n_{2}
+                        \\]
                         </div>
                     </div>
 
@@ -1521,12 +1743,18 @@ function addChapter6UI() {
 
                     <div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
+
                         <div class="math-formula">
-                        n₂ = (1 + 1/k) × [(Z<sub>α/2</sub> + Z<sub>β</sub>) / d]²
+                        \\[
+                        n_{2} = \\left( 1 + \\frac{1}{k} \\right)
+                        \\left( \\frac{Z_{1-\\alpha/2} + Z_{1-\\beta}}{d} \\right)^{2}
+                        \\]
                         </div>
-                        
+
                         <div class="math-formula">
-                        n₁ = k × n₂
+                        \\[
+                        n_{1} = k \\cdot n_{2}
+                        \\]
                         </div>
                     </div>
 
@@ -1953,7 +2181,6 @@ function addChapter7UI() {
                             where m = number of comparisons
                         </div>
                     </div>
-
                     <div class="references-box">
                         <h4><i class="fas fa-book"></i> References</h4>
                         <p>1. K.V.S.Sarma and V. Sai Sarada (2026), Sample Size Determination in Clinical Studies - A Practical Guide, Narosa Publishing House, New Delhi.</p>
@@ -2036,8 +2263,7 @@ function addChapter7UI() {
                     </h4>
 
                     <div class="interpretation" id="c7i2outdesc">Waiting for inputs...</div>
-
-                    <div class="formula-box">
+                  <div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
                         <div class="math-formula">
                             nⱼ = 2s²[(Z<sub>α/2m</sub> + Z<sub>β</sub>) / (μⱼ₂ - μⱼ₁)]²
@@ -2046,11 +2272,11 @@ function addChapter7UI() {
                             where m = number of comparisons, s = common SD
                         </div>
                     </div>
-
                     <div class="references-box">
-                        <h4><i class="fas fa-book"></i> References</h4>
-                        <p>1. Wason J, Magirr D, Law M, Jaki T (2016), Some recommendations for multi-arm multi-stage trials.</p>
-                        <p>2. Dunnett CW, A multiple comparison procedure for comparing several treatments with a control.</p>
+                        <h4><i class="fas fa-book"></i> References</h4>\
+                        <p>1. K.V.S.Sarma and V. Sai Sarada (2026), Sample Size Determination in Clinical Studies - A Practical Guide, Narosa Publishing House, New Delhi.</p>
+                        <p>2. Wason J, Magirr D, Law M, Jaki T (2016), Some recommendations for multi-arm multi-stage trials.</p>
+                        <p>3. Dunnett CW, A multiple comparison procedure for comparing several treatments with a control.</p>
                     </div>
                 </div>
             </div>
