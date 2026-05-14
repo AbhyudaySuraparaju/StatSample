@@ -804,11 +804,11 @@
                 <div class="menu-item" data-sub="c9i3" data-chapter="chapter9">Cohen's Kappa Estimation</div>
                 <div class="menu-item" data-sub="c9i4" data-chapter="chapter9">Compare Two Kappa Values</div>
             </details>
-            <details class="menu-chapter">
+            <!-- <details class="menu-chapter">
                 <summary>Correlation Studies</summary>
                 <div class="menu-item" data-sub="c10i1" data-chapter="chapter10">Estimating Correlation Coefficient</div>
                 <div class="menu-item" data-sub="c10i2" data-chapter="chapter10">Comparing two Correlation Coefficients</div>
-            </details>
+            </details> -->
             <details class="menu-chapter">
                 <summary>Diagnostic Tests - Estimation</summary>
                 <div class="menu-item" data-sub="c11i1" data-chapter="chapter11">Sensitivity Estimation</div>
@@ -826,11 +826,11 @@
                 <div class="menu-item" data-sub="c11i6" data-chapter="chapter11">Two tests - Paired Design</div>
                 <div class="menu-item" data-sub="c11i7" data-chapter="chapter11">Two tests - Unpaired Design</div>
             </details>
-            <details class="menu-chapter">
+            <!-- <details class="menu-chapter">
                 <summary>Comparing two ROC curves</summary>
                 <div class="menu-item" data-sub="c11i8" data-chapter="chapter11">Two AUC's - Unpaired Comparison</div>
                 <div class="menu-item" data-sub="c11i9" data-chapter="chapter11">Two AUC's - Paired Comparison</div>
-            </details>
+            </details> -->
             <details class="menu-chapter">
                 <summary>Survival Studies</summary>
                 <div class="menu-item" data-sub="c12i1" data-chapter="chapter12">Kaplan Meier Estimate</div>
@@ -1736,20 +1736,37 @@ function addChapter5UI() {
 
                     <div class="interpretation" id="c5i1outdesc">Waiting for inputs...</div>
 
-                    <<div class="formula-box">
+                    <div class="formula-box">
                         <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
 
-                        <div class="math-formula">$$
-                        n_{2} = \\frac{\\left(Z_{1-\\alpha/2} + Z_{1-\\beta}\\right)^{2}
-                        \\left(\\frac{p_{1}(1-p_{1})}{k} + p_{2}(1-p_{2})\\right)}
-                        {(p_{1}-p_{2})^{2}}
-                        $$</div>
+                        <div class="math-formula">
+                            $$
+                            n_2 =
+                            \\left(
+                            \\frac{
+                                Z_{1-\\alpha/2} + Z_{1-\\beta}
+                            }{
+                                p_2 - p_1
+                            }
+                            \\right)^2
+                            \\left(
+                                \\frac{
+                                    p_1(1-p_1)
+                                }{
+                                    k
+                                }
+                                +
+                                p_2(1-p_2)
+                            \\right)
+                            $$
+                        </div>
 
-                        <div class="math-formula">$$
-                        n_{1} = k\\,n_{2}
-                        $$</div>
+                        <div class="math-formula">
+                            $$
+                            n_1 = k n_2
+                            $$
+                        </div>
                     </div>
-
                     <div class="references-box">
                         <h4><i class="fas fa-book"></i> References</h4>
                         <p>1. K.V.S.Sarma and V. Sai Sarada (2026), Sample Size Determination in Clinical Studies - A Practical Guide, Narosa Publishing House, New Delhi.</p>
@@ -5561,6 +5578,9 @@ function addChapter11UI() {
     
     document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter11HTML);
     renderMath(document.getElementById('chapter11'));
+    document.querySelectorAll('#chapter11 input[type="radio"][name$="rd"][value="two-tailed"]').forEach(radio => {
+        radio.checked = true;
+    });
 }
 
 // ==================== Chapter 11 Calculation Functions ====================
@@ -6269,6 +6289,9 @@ function addChapter12UI() {
     
     document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter12HTML);
     renderMath(document.getElementById('chapter12'));
+    document.querySelectorAll('#chapter12 input[type="radio"][name$="rd"][value="two-tailed"]').forEach(radio => {
+        radio.checked = true;
+    });
 }
 
 // ==================== Chapter 12 Calculation Functions ====================
@@ -6614,6 +6637,19 @@ function extendSetupForChapters10_12() {
     updateRangeDisplay('c12i4att', 'c12i4attVal');
 }
 
+function setDefaultTwoTailedRadios(scopeSelector) {
+    const scope = document.querySelector(scopeSelector);
+    if (!scope) return;
+    scope.querySelectorAll('input[type="radio"][name$="rd"][value="two-tailed"]').forEach(radio => {
+        radio.checked = true;
+    });
+}
+
+function setDefaultTwoCovariates() {
+    const radio = document.querySelector('#chapter12 input[name="c12i4cov"][value="Two"]');
+    if (radio) radio.checked = true;
+}
+
 // Add all new chapters
 addChapter10UI();
 addChapter11UI();
@@ -6635,6 +6671,9 @@ function prependChapterReferences() {
 const finalOnload = window.onload;
 window.onload = function() {
     if (finalOnload) finalOnload();
+    setDefaultTwoTailedRadios('#chapter11');
+    setDefaultTwoTailedRadios('#chapter12');
+    setDefaultTwoCovariates();
     extendSetupForChapters10_12();
     // prependChapterReferences();
     
