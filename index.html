@@ -801,11 +801,16 @@
                 <div class="menu-item" data-sub="c8i3" data-chapter="chapter8">Cohen's method</div>
             </details>
             <details class="menu-chapter">
+                <summary>Inter-Rater Aggrement</summary>
+                <div class="menu-item" data-sub="c9i5" data-chapter="chapter9"> Lin's Concordance Correlation Coefficient</div>
+                <div class="menu-item" data-sub="c9i6" data-chapter="chapter9"> Kendall's W</div>
+                <div class="menu-item" data-sub="c9i3" data-chapter="chapter9">Cohen's Kappa Estimation</div>
+                <div class="menu-item" data-sub="c9i4" data-chapter="chapter9">Compare Two Kappa Values</div>
+            </details>
+            <details class="menu-chapter">
                 <summary>Paired Comparison of Proportions</summary>
                 <div class="menu-item" data-sub="c9i1" data-chapter="chapter9">Method of Discordant pairs</div>
                 <div class="menu-item" data-sub="c9i2" data-chapter="chapter9">Odds Ratio Method</div>
-                <div class="menu-item" data-sub="c9i3" data-chapter="chapter9">Cohen's Kappa Estimation</div>
-                <div class="menu-item" data-sub="c9i4" data-chapter="chapter9">Compare Two Kappa Values</div>
             </details>
             <!-- <details class="menu-chapter">
                 <summary>Correlation Studies</summary>
@@ -3774,24 +3779,299 @@ function addChapter9UI() {
                 </div>
             </div>
         </div>
+
+        <!-- Tab 5: Lin's CCC Method -->
+        <div id="c9i5" class="sub-content hidden">
+            <div class="content-area">
+                <div class="sidebar">
+                    <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
+                    
+                    <div class="input-group">
+                        <label>Concordance Correlation Coefficient H₀ (ρ₀)</label>
+                        <input type="number" id="c9i5cc1" min="0" max="1" step="0.01" value="0.70">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Concordance Correlation Coefficient H₁ (ρ₁)</label>
+                        <input type="number" id="c9i5cc2" min="0" max="1" step="0.01" value="0.90">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Scaling Factor(1 <= w <= 1.2)</label>
+                        <input type="number" id="c9i5psi" min="0" step="0.01" value="1.0">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Confidence Level (%): <span id="c9i5alphaVal">95</span>%</label>
+                        <input type="range" id="c9i5alpha" min="0" max="100" value="95" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Power (%): <span id="c9i5betaVal">80</span>%</label>
+                        <input type="range" id="c9i5beta" min="0" max="100" value="80" step="1">
+                    </div>
+
+                    <div class="radio-group">
+                        <label><input type="radio" name="c9i5rd" value="two-tailed" checked> Two-tailed</label>
+                        <label><input type="radio" name="c9i5rd" value="one-tailed"> One-tailed</label>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Attrition (%): <span id="c9i5attVal">5</span>%</label>
+                        <input type="range" id="c9i5att" min="0" max="100" value="5" step="1">
+                    </div>
+                </div>
+
+                <div class="main-panel">
+                    <div class="purpose-box">
+                        <h4><i class="fas fa-bullseye"></i> Purpose</h4>
+                        <p>Applicable to determine the minimum sample size to estimate the agreement between two methods/raters with measured/scaled values, using Lin's Concordance Correlation Coefficient (CCC). One of the methods is the gold standard and the other one is a new one. Each subject is exposed to these two methods under a paired design and the outcome is a measured value (like body weight in kg). Lin's method uses ANOVA approach to simultaneously handle precision and scale factors. The chief inputs are the anticipated CCC under H₀ and H₁ and a scaling factor 'w' which is based on the mean and SD of the measurements under the two methods along with Pearson's correlation coefficient. This calculator determines n (number of pairs) to meet a confidence level of 100(1-α)% with power (1-β).</p>
+                    </div>
+
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                        <i class="fas fa-chart-bar"></i> Results
+                    </h4>
+
+                    <div class="result-label">Test Type</div>
+                    <div class="result-value small" id="c9i5outtails">Two-tailed comparison</div>
+
+                    <div class="result-label">Sample Size</div>
+                    <div class="result-value" id="c9i5size">-</div>
+
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0; border-radius: 5px;">
+                        <i class="fas fa-lightbulb"></i> Interpretation
+                    </h4>
+
+                    <div class="interpretation" id="c9i5outdesc">Waiting for inputs...</div>
+                    <div class="formula-box">
+                        <h4><i class="fas fa-square-root-alt"></i> Formulas</h4>
+
+                        <div class="math-formula">
+                            $$
+                            n = \\left( \\frac{Z_{1-\\alpha/2} + Z_{1-\\beta}}{(\\zeta_1 - \\zeta_0)} \\right)^2 \\; w^2 + 2
+                            $$
+                        </div>
+
+                        <div class="math-formula">
+                            $$
+                            \\text{where } 
+                            \\zeta_0 = \\log\\left(\\frac{1-\\rho_0}{1+\\rho_0}\\right),
+                            \\quad
+                            \\zeta_1 = \\log\\left(\\frac{1-\\rho_1}{1+\\rho_1}\\right),
+                            \\quad \\text{denote Fisher's Z-transformation of } \\rho
+                            $$
+                        </div>
+
+                        <div class="math-formula">
+                            and w is the variance scaling factor
+                        </div>
+                    </div>
+                    <div class="references-box">
+                        <h4><i class="fas fa-book"></i> References</h4>
+                        <p>1. K.V.S.Sarma and V. Sai Sarada (2026), Sample Size Determination in Clinical Studies - A Practical Guide, Narosa Publishing House, New Delhi.</p>
+                        <p>2. Lu, M. J., Zhong, W. H., Liu, Y. X., Miao, H. Z., Li, Y. F., & Ji, M. H., (2016). Sample size for assessing agreement between two methods of measurement by concordance correlation coefficient. BMC Medical Research Methodology, 16:63. https://doi.org/10.1186/s12874-016-0167-z.</p>
+                        <p>3. Lin, L. I-K., (1989). A concordance correlation coefficient to evaluate reproducibility. Biometrics, 45(1), 255–268.</p>
+                        <p>4. Steichen, T. J., & Cox, N. J. (2002). A note on the concordance correlation coefficient. The Stata Journal, 2(2), 183–189.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tab 6: Kendall's W Method -->
+        <div id="c9i6" class="sub-content hidden">
+            <div class="content-area">
+
+                <div class="sidebar">
+                    <h3><i class="fas fa-sliders-h"></i> Inputs</h3>
+
+                    <div class="input-group">
+                        <label>Anticipated W (between 0 & 1)</label>
+                        <input type="number" id="c9i6w" min="0" max="1" step="0.01" value="0.4">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Number of raters (m >2)</label>
+                        <input type="number" id="c9i6m" min="2" step="1" value="3">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Confidence Level (%): <span id="c9i6alphaVal">95</span>%</label>
+                        <input type="range" id="c9i6alpha" min="0" max="100" value="95" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Power (%): <span id="c9i6betaVal">80</span>%</label>
+                        <input type="range" id="c9i6beta" min="0" max="100" value="80" step="1">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Attrition (%): <span id="c9i6attVal">5</span>%</label>
+                        <input type="range" id="c9i6att" min="0" max="100" value="5" step="1">
+                    </div>
+                </div>
+
+                <div class="main-panel">
+
+                    <div class="purpose-box">
+                        <h4><i class="fas fa-bullseye"></i> Purpose</h4>
+                        <p>
+                            Useful to determine minimum sample size for Kendall’s W agreement among 3+ raters using Chi-square approximation.
+                        </p>
+                    </div>
+
+                    <h4 style="color: purple; background: #fff3cd; padding: 10px; margin: 20px 0;">
+                        Results
+                    </h4>
+
+                    <div class="result-label">Sample Size</div>
+                    <div class="result-value" id="c9i6size">-</div>
+
+                    <div class="interpretation" id="c9i6outdesc">Waiting for inputs...</div>
+
+                    <div class="formula-box">
+                        <h4>Formula</h4>
+
+                        <div class="math-formula">
+                            $$
+                            n \\approx \\frac{\\chi^2_{\\alpha,\\,n-1} + \\chi^2_{\\beta,\\,n-1}}{m + W} + 1
+                            $$
+                        </div>
+
+                        <div class="math-formula">
+                            where $df = n - 1$ and $\\lambda = m(n-1)W$
+                        </div>
+                    </div>
+                    <div class="references-box">
+                        <h4><i class="fas fa-book"></i> References</h4>
+                        <p>1. K.V.S.Sarma and V. Sai Sarada (2026), Sample Size Determination in Clinical Studies - A Practical Guide, Narosa Publishing House, New Delhi.</p>
+                        <p>2. Cho Biometrics, Mar; 43(1):207-11.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
     `;
     
-    document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', chapter9HTML);
-    renderMath(document.getElementById('chapter9'));
-    updateRangeDisplay('c9i1alpha', 'c9i1alphaVal');
-    updateRangeDisplay('c9i1beta', 'c9i1betaVal');
-    updateRangeDisplay('c9i1att', 'c9i1attVal');
-    updateRangeDisplay('c9i2alpha', 'c9i2alphaVal');
-    updateRangeDisplay('c9i2beta', 'c9i2betaVal');
-    updateRangeDisplay('c9i2att', 'c9i2attVal');
-    updateRangeDisplay('c9i3alpha', 'c9i3alphaVal');
-    updateRangeDisplay('c9i3att', 'c9i3attVal');
-    updateRangeDisplay('c9i4alpha', 'c9i4alphaVal');
-    updateRangeDisplay('c9i4beta', 'c9i4betaVal');
-    updateRangeDisplay('c9i4att', 'c9i4attVal');
+        document.querySelector('.content-wrapper')
+            .insertAdjacentHTML('beforeend', chapter9HTML);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+
+                // =========================
+                // RANGE INIT
+                // =========================
+
+                updateRangeDisplay('c9i1alpha', 'c9i1alphaVal');
+                updateRangeDisplay('c9i1beta', 'c9i1betaVal');
+                updateRangeDisplay('c9i1att', 'c9i1attVal');
+
+                updateRangeDisplay('c9i2alpha', 'c9i2alphaVal');
+                updateRangeDisplay('c9i2beta', 'c9i2betaVal');
+                updateRangeDisplay('c9i2att', 'c9i2attVal');
+
+                updateRangeDisplay('c9i3alpha', 'c9i3alphaVal');
+                updateRangeDisplay('c9i3att', 'c9i3attVal');
+
+                updateRangeDisplay('c9i4alpha', 'c9i4alphaVal');
+                updateRangeDisplay('c9i4beta', 'c9i4betaVal');
+                updateRangeDisplay('c9i4att', 'c9i4attVal');
+
+                updateRangeDisplay('c9i5alpha', 'c9i5alphaVal');
+                updateRangeDisplay('c9i5beta', 'c9i5betaVal');
+                updateRangeDisplay('c9i5att', 'c9i5attVal');
+
+                // =========================
+                // STEP 1: render math FIRST
+                // =========================
+
+                renderMath(document.getElementById('chapter9'));
+
+                // =========================
+                // STEP 2: bind events AFTER DOM stabilization
+                // =========================
+
+                initC9i5Events();
+
+                if (document.getElementById('c9i6alpha')) {
+
+                    updateRangeDisplay('c9i6alpha', 'c9i6alphaVal');
+                    updateRangeDisplay('c9i6beta', 'c9i6betaVal');
+                    updateRangeDisplay('c9i6att', 'c9i6attVal');
+
+                    initC9i6Events();
+                }
+            });
+        });
+    
 }
 
+function initC9i5Events() {
+
+    [
+        'c9i5cc1',
+        'c9i5cc2',
+        'c9i5psi',
+        'c9i5alpha',
+        'c9i5beta',
+        'c9i5att'
+    ].forEach(id => {
+
+        const el = document.getElementById(id);
+
+        if (el) {
+            el.addEventListener(
+                'input',
+                updateC9i5
+            );
+        }
+    });
+
+    document
+        .querySelectorAll(
+            'input[name="c9i5rd"]'
+        )
+        .forEach(radio => {
+
+            radio.addEventListener(
+                'change',
+                updateC9i5
+            );
+        });
+
+    updateC9i5();
+}
+
+function initC9i6Events() {
+
+    const ids = [
+        'c9i6w',
+        'c9i6m',
+        'c9i6alpha',
+        'c9i6beta',
+        'c9i6att'
+    ];
+
+    const bind = () => {
+
+        ids.forEach(id => {
+
+            const el = document.getElementById(id);
+
+            if (!el) return;
+
+            el.addEventListener('input', updateC9i6);
+            el.addEventListener('change', updateC9i6);
+        });
+    };
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            bind();
+            updateC9i6();
+        });
+    });
+}
 // ==================== Chapter 9 Calculation Functions ====================
 
 function updateC9i1() {
@@ -3963,6 +4243,392 @@ function updateC9i4() {
     document.getElementById('c9i4outdesc').textContent = desc;
 }
 
+
+function updateC9i5() {
+
+    const cc1 = getNum('c9i5cc1');
+    const cc2 = getNum('c9i5cc2');
+    const psi = getNum('c9i5psi');
+
+    const alpha = (100 - getNum('c9i5alpha')) / 100;
+    const beta = (100 - getNum('c9i5beta')) / 100;
+    const att = getNum('c9i5att') / 100;
+
+    const selectedRadio = document.querySelector(
+        'input[name="c9i5rd"]:checked'
+    );
+
+    const isTwoTailed =
+        selectedRadio &&
+        selectedRadio.value === 'two-tailed';
+
+    let alp;
+
+    if (isTwoTailed) {
+        // Same logic as R code
+        alp = 0.5 * alpha;
+    } else {
+        // Same logic as R code
+        alp = 2 * alpha;
+    }
+
+    const z_alpha = qnorm(1 - alp / 2);
+    const z_beta = qnorm(1 - beta);
+
+    const ff0 = (1 + cc1) / (1 - cc1);
+    const ff1 = (1 + cc2) / (1 - cc2);
+
+    const num =
+        psi * psi *
+        Math.pow(z_alpha + z_beta, 2);
+
+    const den =
+        Math.pow(
+            0.5 * Math.log(ff0) -
+            0.5 * Math.log(ff1),
+            2
+        );
+
+    const n = Math.ceil(num / den) + 2;
+
+    document.getElementById('c9i5outtails').textContent =
+        isTwoTailed
+            ? 'Two-tailed comparison'
+            : 'One-tailed comparison';
+
+    document.getElementById('c9i5size').textContent = n;
+
+    const attritionN =
+        Math.ceil(n * (1 + att));
+
+    const desc =
+        `A sample of at least ${n} ` +
+        `(${attritionN} with ${att * 100}% attrition) ` +
+        `subjects is required to detect a significant agreement ` +
+        `between the gold standard and the new method in order ` +
+        `to accept the anticipated concordance of ${cc2} with ` +
+        `${(1 - alpha) * 100}% confidence and a power of ` +
+        `${(1 - beta) * 100}% using a ` +
+        `${isTwoTailed ? 'two-tailed' : 'one-tailed'} comparison.`;
+
+    document.getElementById('c9i5outdesc').textContent = desc;
+
+    // Debugging
+    console.log({
+        alpha,
+        beta,
+        alp,
+        z_alpha,
+        z_beta,
+        isTwoTailed,
+        n
+    });
+}
+
+function approxNonCentralChiSqCDF(x, df, lambda) {
+
+    // improved sensitivity (fixes frozen output issue)
+    const adjustedX = x + 0.5 * lambda;
+
+    return pchisq(adjustedX, df);
+}
+/****************************************************
+ * 1. STANDARD NORMAL (unchanged)
+ ****************************************************/
+function qnorm(p) {
+    if (p <= 0 || p >= 1) return NaN;
+
+    const a1 = -39.6968302866538;
+    const a2 = 220.946098424521;
+    const a3 = -275.928510446969;
+    const a4 = 138.357751867269;
+    const a5 = -30.6647980661472;
+    const a6 = 2.50662827745924;
+
+    const b1 = -54.4760987982241;
+    const b2 = 161.585836858041;
+    const b3 = -155.698979859887;
+    const b4 = 66.8013118877197;
+    const b5 = -13.2806815528857;
+
+    const c1 = -7.78489400243029e-3;
+    const c2 = -0.322396458041136;
+    const c3 = -2.40075827716184;
+    const c4 = -2.54973253934373;
+    const c5 = 4.37466414146497;
+    const c6 = 2.93816398269878;
+
+    const d1 = 7.78469570904146e-3;
+    const d2 = 0.32246712907004;
+    const d3 = 2.445134137143;
+    const d4 = 3.75440866190742;
+
+    const plow = 0.02425;
+    const phigh = 1 - plow;
+
+    let q, r;
+
+    if (p < plow) {
+        q = Math.sqrt(-2 * Math.log(p));
+        return -((((((c1*q + c2)*q + c3)*q + c4)*q + c5)*q + c6) /
+                 ((((d1*q + d2)*q + d3)*q + d4)*q + 1));
+    }
+
+    if (p > phigh) {
+        q = Math.sqrt(-2 * Math.log(1 - p));
+        return (((((c1*q + c2)*q + c3)*q + c4)*q + c5)*q + c6) /
+               ((((d1*q + d2)*q + d3)*q + d4)*q + 1);
+    }
+
+    q = p - 0.5;
+    r = q * q;
+
+    return (((((a1*r + a2)*r + a3)*r + a4)*r + a5)*r + a6) * q /
+           (((((b1*r + b2)*r + b3)*r + b4)*r + b5)*r + 1);
+}
+
+
+/****************************************************
+ * 2. CENTRAL CHI-SQUARE CDF (CORRECT via gamma)
+ * P(k/2, x/2)
+ ****************************************************/
+function gammaln(x) {
+    const cof = [
+        76.18009172947146, -86.50532032941677,
+        24.01409824083091, -1.231739572450155,
+        0.001208650973866179, -0.5395239384953e-5
+    ];
+
+    let y = x;
+    let tmp = x + 5.5;
+    tmp -= (x + 0.5) * Math.log(tmp);
+
+    let ser = 1.000000000190015;
+
+    for (let j = 0; j < cof.length; j++) {
+        y += 1;
+        ser += cof[j] / y;
+    }
+
+    return -tmp + Math.log(2.5066282746310005 * ser / x);
+}
+
+// Regularized lower incomplete gamma P(a,x)
+function gammap(a, x) {
+    if (x <= 0) return 0;
+    if (x < a + 1) {
+        // series expansion
+        let ap = a;
+        let sum = 1 / a;
+        let del = sum;
+
+        for (let n = 1; n <= 100; n++) {
+            ap += 1;
+            del *= x / ap;
+            sum += del;
+            if (Math.abs(del) < Math.abs(sum) * 1e-12) break;
+        }
+
+        return sum * Math.exp(-x + a * Math.log(x) - gammaln(a));
+    } else {
+        // continued fraction
+        let b = x + 1 - a;
+        let c = 1 / 1e-30;
+        let d = 1 / b;
+        let h = d;
+
+        for (let i = 1; i <= 100; i++) {
+            let an = -i * (i - a);
+            b += 2;
+            d = an * d + b;
+            if (Math.abs(d) < 1e-30) d = 1e-30;
+            c = b + an / c;
+            if (Math.abs(c) < 1e-30) c = 1e-30;
+            d = 1 / d;
+            let del = d * c;
+            h *= del;
+
+            if (Math.abs(del - 1) < 1e-12) break;
+        }
+
+        return 1 - h * Math.exp(-x + a * Math.log(x) - gammaln(a));
+    }
+}
+
+function qchisq(p, df) {
+
+    let low = 0;
+    let high = df * 20 + 50; // wider safe bound
+
+    for (let i = 0; i < 80; i++) {
+
+        const mid = (low + high) / 2;
+        const val = pchisq(mid, df);
+
+        if (val > p) {
+            high = mid;
+        } else {
+            low = mid;
+        }
+    }
+
+    return (low + high) / 2;
+}
+function pchisq(x, df) {
+
+    if (x <= 0 || df <= 0) return 0;
+
+    const k = df / 2;
+    const t = x / 2;
+
+    return gammainc(k, t);
+}
+function gammainc(a, x) {
+
+    if (x <= 0) return 0;
+
+    // Series expansion for x < a + 1
+    if (x < a + 1) {
+
+        let ap = a;
+        let sum = 1 / a;
+        let del = sum;
+
+        for (let i = 1; i <= 100; i++) {
+            ap += 1;
+            del *= x / ap;
+            sum += del;
+
+            if (Math.abs(del) < Math.abs(sum) * 1e-12) break;
+        }
+
+        return sum * Math.exp(-x + a * Math.log(x) - gammaln(a));
+    }
+
+    // Continued fraction for x >= a + 1
+    let b = x + 1 - a;
+    let c = 1e30;
+    let d = 1 / b;
+    let h = d;
+
+    for (let i = 1; i <= 100; i++) {
+
+        const an = -i * (i - a);
+
+        b += 2;
+        d = an * d + b;
+        if (Math.abs(d) < 1e-30) d = 1e-30;
+
+        c = b + an / c;
+        if (Math.abs(c) < 1e-30) c = 1e-30;
+
+        d = 1 / d;
+        const delta = d * c;
+
+        h *= delta;
+
+        if (Math.abs(delta - 1) < 1e-12) break;
+    }
+
+    return 1 - Math.exp(-x + a * Math.log(x) - gammaln(a)) * h;
+}
+/****************************************************
+ * 3. NON-CENTRAL CHI-SQUARE CDF (FIXED)
+ * Poisson mixture method
+ ****************************************************/
+function pnchisq(x, df, lambda) {
+
+    if (x <= 0 || df <= 0) return 0;
+
+    const halfLambda = lambda / 2;
+
+    let kMax = 200;
+
+    let logPoisson = -halfLambda;
+    let sum = 0;
+
+    for (let k = 0; k < kMax; k++) {
+
+        const dfk = df + 2 * k;
+
+        if (dfk > 500) break;
+
+        const cdf = pchisq(x, dfk);
+
+        const term = Math.exp(logPoisson) * cdf;
+
+        sum += term;
+
+        // update logPoisson safely
+        logPoisson += Math.log(halfLambda + 1e-300) - Math.log(k + 1);
+
+        if (Math.exp(logPoisson) < 1e-14) break;
+    }
+
+    return Math.min(Math.max(sum, 0), 1);
+}
+
+/****************************************************
+ * 4. MAIN UPDATE FUNCTION (FIXED)
+ ****************************************************/
+function updateC9i6() {
+
+    const W = getNum('c9i6w');
+    const m = getNum('c9i6m');
+
+    const aRaw = getNum('c9i6alpha');
+    const bRaw = getNum('c9i6beta');
+    const attRaw = getNum('c9i6att');
+
+    if (isNaN(W) || isNaN(m) || isNaN(aRaw) || isNaN(bRaw) || isNaN(attRaw)) {
+        document.getElementById('c9i6outdesc').textContent =
+            "Waiting for valid inputs...";
+        return;
+    }
+
+    if (W <= 0 || W > 1) {
+        document.getElementById('c9i6outdesc').textContent =
+            "Expected Kendall's W must be between 0 and 1.";
+        return;
+    }
+
+    const alpha = (100 - aRaw) / 100;
+    const targetPower = (100 - bRaw) / 100;
+    const att = attRaw / 100;
+
+    let n = 3;
+    let currentPower = 0;
+
+    while (n < 1000) {
+
+        n++;
+        const df = n - 1;
+
+        const critVal = qchisq(1 - alpha, df);
+
+        const lambda = m * (n - 1) * W;
+
+        // IMPORTANT FIX:
+        // DO NOT double invert unless pnchisq is verified 100%
+        const cdf = pnchisq(critVal, df, lambda);
+
+        currentPower = 1 - cdf;
+
+        console.log({ n, df, lambda, currentPower });
+
+        if (currentPower >= targetPower) break;
+    }
+
+    const requiredN = n;
+    const attritionN = Math.ceil(requiredN * (1 + att));
+
+    document.getElementById('c9i6size').textContent = requiredN;
+
+    document.getElementById('c9i6outdesc').textContent =
+        `With anticipated agreement W = ${W}, a sample of at least ${requiredN} ` +
+        `(${attritionN} with ${att * 100}% attrition) subjects is required.`;
+}
+
 // Update the setupNewInputListeners function to include new chapters
 function extendSetupNewInputListeners() {
     // Chapter 7 listeners
@@ -4045,6 +4711,23 @@ function extendSetupNewInputListeners() {
         radio.addEventListener('change', updateC9i4);
     });
 
+    ['c9i5cc1', 'c9i5cc2', 'c9i5psi', 'c9i5alpha', 'c9i5beta', 'c9i5att'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateC9i5);
+    });
+    document.querySelectorAll('input[name="c9i5rd"]').forEach(radio => {
+        radio.addEventListener('change', updateC9i5);
+    });
+    ['c9i6w', 'c9i6m', 'c9i6alpha', 'c9i6beta', 'c9i6att']
+    .forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateC9i6);
+    });
+
+    document.querySelectorAll('input[name="c9i6rd"]').forEach(radio => {
+        radio.addEventListener('change', updateC9i6);
+    });
+
     // Range displays for new chapters
     updateRangeDisplay('c7i1count', 'c7i1countVal');
     updateRangeDisplay('c7i1alpha', 'c7i1alphaVal');
@@ -4086,6 +4769,16 @@ function extendSetupNewInputListeners() {
     updateRangeDisplay('c9i4alpha', 'c9i4alphaVal');
     updateRangeDisplay('c9i4beta', 'c9i4betaVal');
     updateRangeDisplay('c9i4att', 'c9i4attVal');
+    
+    updateRangeDisplay('c9i5alpha', 'c9i5alphaVal');
+    updateRangeDisplay('c9i5beta', 'c9i5betaVal');
+    updateRangeDisplay('c9i5att', 'c9i5attVal');
+
+    updateRangeDisplay('c9i6w', 'c9i6wVal');
+    updateRangeDisplay('c9i6m', 'c9i6mVal');
+    updateRangeDisplay('c9i6alpha', 'c9i6alphaVal');
+    updateRangeDisplay('c9i6beta', 'c9i6betaVal');
+    updateRangeDisplay('c9i6att', 'c9i6attVal');
 }
 
 // Add chapter switching logic
@@ -4145,6 +4838,8 @@ function setupAdditionalChapterTabs() {
             if (subId === 'c9i2') updateC9i2();
             if (subId === 'c9i3') updateC9i3();
             if (subId === 'c9i4') updateC9i4();
+            if (subId === 'c9i5') updateC9i5();
+            if (subId === 'c9i6') updateC9i6();
         });
     });
 }
@@ -4165,6 +4860,8 @@ window.onload = function() {
     try { updateC9i2(); } catch(e) { console.log(e); }
     try { updateC9i3(); } catch(e) { console.log(e); }
     try { updateC9i4(); } catch(e) { console.log(e); }
+    try { updateC9i5(); } catch(e) { console.log(e); }
+    try { updateC9i6(); } catch(e) { console.log(e); }
     try { updateC10i1(); } catch(e) { console.log(e); }
     try { updateC10i2(); } catch(e) { console.log(e); }
     updateC11i1();
